@@ -1,0 +1,108 @@
+openapi: 3.0.0
+info:
+  description: "This is products server."
+  version: "1.0.0"
+  title: "Products service"
+  contact:
+    email: "anastasiya_sidorenko@epam.com"
+schemes:
+  - "https"
+servers: 
+  - url: https://ujh03qvd0a.execute-api.eu-west-1.amazonaws.com/dev
+paths:
+  /products:
+    get:
+      tags:
+      - "Products service"
+      description: "Get all products from the DB"
+      summary: "Return all products"
+      operationId: "getProductsList"
+      responses:
+        "200":
+          description: "Successful operation"
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                  properties: 
+                    count:
+                      type: number
+                      example: 1
+                    description:
+                      type: string
+                      example: "description" 
+                    id:
+                      type: string
+                      example: "game-1" 
+                    price:
+                      type: number
+                      example: 12.3
+                    title:
+                      type: string
+                      example: "Title" 
+                    imageUrl:
+                      type: string
+                      example: "https://hot-game.info/uploads/media/game/0001/44/thumb_43879_game_poster.jpeg" 
+        "404":
+          description: "Products not found"
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Products not found"
+  /prodcuts/{productId}:
+    get:
+      tags:
+      - "Products service"
+      summary: "Find product by ID"
+      description: "Returns a single product"
+      operationId: "getPetById"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID of product to return"
+        required: true
+        schema:
+          type: string
+          example: "game-1"
+      responses:
+        "200":
+          description: "Successful operation"
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                  properties: 
+                    count:
+                      type: number
+                      example: 1
+                    description:
+                      type: string
+                      example: "description" 
+                    id:
+                      type: string
+                      example: "game-1" 
+                    price:
+                      type: number
+                      example: 12.3
+                    title:
+                      type: string
+                      example: "Title" 
+                    imageUrl:
+                      type: string
+                      example: "https://hot-game.info/uploads/media/game/0001/44/thumb_43879_game_poster.jpeg" 
+        "404":
+          description: "Products not found"
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Products not found"
