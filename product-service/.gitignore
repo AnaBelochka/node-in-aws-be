@@ -9,4 +9,4 @@ jspm_packages
 .esbuild
 
 coverage
-.idea
+../.idea
