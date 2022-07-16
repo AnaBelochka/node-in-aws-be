@@ -5,16 +5,16 @@ import { middyfy } from '@libs/lambda';
 import { getProductsListMockReturnFromDB } from "../mocks/mocked-functions";
 
 const getProductsList: ValidatedEventAPIGatewayProxyEvent<{}> = async () => {
-  try {
-    const products = await getProductsListMockReturnFromDB();
+  const products = await getProductsListMockReturnFromDB();
 
+  if (products && products.length) {
     return formatJSONResponse({
       products,
     }, 200);
-  } catch (e) {
+  } else {
     return formatJSONResponse({
       message: "Products not found",
-    }, 404);
+    },404);
   }
 };
 

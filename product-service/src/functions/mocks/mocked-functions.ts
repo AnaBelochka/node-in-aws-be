@@ -1,9 +1,9 @@
-import products from "./mocked-products.json";
+import { products } from "./mocked-products.ts";
 
 export const getProductsListMockReturnFromDB = async () => {
-    return Promise.resolve(products);
-}
+    return await Promise.resolve(products);
+};
 
 export const getProductsByIdMockReturnFromDB = async (id: string) => {
-    return Promise.resolve(products.filter((product) => product.id === id));
-}
+    return await Promise.resolve(products.filter((product) => product.id === id));
+};
