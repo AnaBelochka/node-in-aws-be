@@ -19,11 +19,6 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      PG_HOST: 'game-shop.csb3e97flgsi.eu-west-1.rds.amazonaws.com',
-      PG_PORT: '5432',
-      PG_DATABASE: 'games',
-      PG_USERNAME: 'superuser',
-      PG_PASSWORD: 'Jsv1xyq50MdwCfP1re9i',
     },
   },
   // import the function via paths
