@@ -1,20 +1,38 @@
+import { Client } from "pg";
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 
-import { getProductsListMockReturnFromDB } from "../mocks/mocked-functions";
+import { dbOptions } from "../../../pg-client-settings";
 
-const getProductsList: ValidatedEventAPIGatewayProxyEvent<{}> = async () => {
-  const products = await getProductsListMockReturnFromDB();
+import { getAllProductsQueryTemplate } from "../constants";
 
-  if (products && products.length) {
+const getProductsList: ValidatedEventAPIGatewayProxyEvent<{}> = async (event) => {
+  console.log("Lambda function getProductsList executed with event: ", event);
+
+  const client = new Client(dbOptions);
+
+  await client.connect();
+
+  try {
+    const { rows: products } = await client.query(getAllProductsQueryTemplate);
+
+    if (products && products.length) {
+      return formatJSONResponse({
+        products,
+      }, 200);
+    } else {
+      return formatJSONResponse({
+        message: "Products not found",
+      },404);
+    }
+  } catch (error) {
     return formatJSONResponse({
-      products,
-    }, 200);
-  } else {
-    return formatJSONResponse({
-      message: "Products not found",
-    },404);
+      message: "Internal server error",
+      error,
+    },500);
+  } finally {
+    client.end();
   }
 };
 

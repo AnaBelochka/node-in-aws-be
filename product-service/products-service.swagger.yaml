@@ -7,46 +7,46 @@ info:
     email: "anastasiya_sidorenko@epam.com"
 schemes:
   - "https"
-servers: 
+servers:
   - url: https://ujh03qvd0a.execute-api.eu-west-1.amazonaws.com/dev
 paths:
   /products:
     get:
       tags:
-      - "Products service"
+        - "Products service"
       description: "Get all products from the DB"
       summary: "Return all products"
       operationId: "getProductsList"
       responses:
         "200":
           description: "Successful operation"
-          content: 
+          content:
             application/json:
               schema:
                 type: array
-                items: 
-                  properties: 
+                items:
+                  properties:
                     count:
                       type: number
                       example: 1
                     description:
                       type: string
-                      example: "description" 
+                      example: "description"
                     id:
                       type: string
-                      example: "game-1" 
+                      example: "game-1"
                     price:
                       type: number
                       example: 12.3
                     title:
                       type: string
-                      example: "Title" 
+                      example: "Title"
                     imageUrl:
                       type: string
-                      example: "https://hot-game.info/uploads/media/game/0001/44/thumb_43879_game_poster.jpeg" 
+                      example: "https://hot-game.info/uploads/media/game/0001/44/thumb_43879_game_poster.jpeg"
         "404":
           description: "Products not found"
-          content: 
+          content:
             application/json:
               schema:
                 type: object
@@ -54,51 +54,127 @@ paths:
                   message:
                     type: string
                     example: "Products not found"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+                  error:
+                    type: string
+                    example: "Error description"
+    post:
+      tags:
+        - "Products service"
+      description: "Create new product"
+      summary: "Create product"
+      operationId: "createProduct"
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Title"
+                description:
+                  type: string
+                  example: "Description"
+                imageUrl:
+                  type: string
+                  example: "imageUrl"
+                count:
+                  type: number
+                  example: 12
+                price:
+                  type: number
+                  example: 12
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product successfully created"
+        "400":
+          description: "Invalid input parameter"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid input parameter"
+        "500":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+                  error:
+                    type: string
+                    example: "Error description"
   /prodcuts/{productId}:
     get:
       tags:
-      - "Products service"
+        - "Products service"
       summary: "Find product by ID"
       description: "Returns a single product"
       operationId: "getPetById"
       parameters:
-      - name: "productId"
-        in: "path"
-        description: "ID of product to return"
-        required: true
-        schema:
-          type: string
-          example: "game-1"
+        - name: "productId"
+          in: "path"
+          description: "ID of product to return"
+          required: true
+          schema:
+            type: string
+            example: "game-1"
       responses:
         "200":
           description: "Successful operation"
-          content: 
+          content:
             application/json:
               schema:
                 type: array
-                items: 
-                  properties: 
+                items:
+                  properties:
                     count:
                       type: number
                       example: 1
                     description:
                       type: string
-                      example: "description" 
+                      example: "description"
                     id:
                       type: string
-                      example: "game-1" 
+                      example: "game-1"
                     price:
                       type: number
                       example: 12.3
                     title:
                       type: string
-                      example: "Title" 
+                      example: "Title"
                     imageUrl:
                       type: string
-                      example: "https://hot-game.info/uploads/media/game/0001/44/thumb_43879_game_poster.jpeg" 
+                      example: "https://hot-game.info/uploads/media/game/0001/44/thumb_43879_game_poster.jpeg"
         "404":
           description: "Products not found"
-          content: 
+          content:
             application/json:
               schema:
                 type: object
@@ -106,3 +182,16 @@ paths:
                   message:
                     type: string
                     example: "Products not found"
+        "500":
+          description: "Internal server error"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+                  error:
+                    type: string
+                    example: "Error description"
