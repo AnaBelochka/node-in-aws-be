@@ -28,13 +28,11 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     await client.query("BEGIN");
 
-    const insertIntoProductsTableQuery = `${createProductQueryTemplate} ($1, $2, $3, $4) RETURNING id`;
     const insertIntoProductsTableValues = [body.title, body.description, body.price, body.imageUrl];
-    const res = await client.query(insertIntoProductsTableQuery, insertIntoProductsTableValues);
-    const insertIntoStockTableQuery = `${createStockQueryTemplate} ($1, $2)`;
+    const res = await client.query(createProductQueryTemplate, insertIntoProductsTableValues);
     const insertIntoStockTableValues = [res.rows[0].id, body.count];
 
-    await client.query(insertIntoStockTableQuery, insertIntoStockTableValues);
+    await client.query(createStockQueryTemplate, insertIntoStockTableValues);
     await client.query('COMMIT');
 
     return formatJSONResponse({
