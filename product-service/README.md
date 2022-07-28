@@ -100,8 +100,7 @@ Queries to DB:
       id uuid primary key default uuid_generate_v4(),
       title text not null,
       description text,
-      price integer,
-      imageUrl text
+      price integer
    )
 2. Create table stock
    create table stock (
@@ -111,20 +110,20 @@ Queries to DB:
       foreign key ("product_id") references "products" ("id")
    )
 3. Fill in table products
-   insert into products (title, description, price, imageUrl) values  
-   ('Cyberpunk 2077', 'Cyberpunk 2077 is an open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival. Improved and featuring all-new free additional content, customize your character and playstyle as you take on jobs, build a reputation, and unlock upgrades. The relationships you forge and the choices you make will shape the story and the world around you. Legends are made here. What will yours be?', 2.4, 'https://hot-game.info/uploads/media/game/0001/44/thumb_43879_game_poster.jpeg'),
-   ('Assassins creed: Valhalla', 'In Assassins Creed® Valhalla, become Eivor, a legendary Viking warrior on a quest for glory. Explore Englands Dark Ages as you raid your enemies, grow your settlement, and build your political power.', 10, 'https://pstationblog.ru/wp-content/uploads/2020/08/assassins-creed-valhalla.jpg'),
-   ('The Elder Scrolls V: Skyrim', 'The Elder Scrolls V: Skyrim is an action role-playing video game developed by Bethesda Game Studios and published by Bethesda Softworks. It is the fifth main installment in the Elder Scrolls series, following 2006s', 23, 'https://cdn-ext.fanatical.com/production/product/1280x720/305f04c9-8780-4c7b-91dd-e87979844dab.jpg'),
-   ('Red dead redemption 2', 'Winner of over 175 Game of the Year Awards and recipient of over 250 perfect scores, RDR2 is the epic tale of outlaw Arthur Morgan and the infamous Van der Linde gang, on the run across America at the dawn of the modern age. Also includes access to the shared living world of Red Dead Online.', 15, 'https://i.playground.ru/p/ViQ3s740dLb0pJXIbPqUMw.jpeg'),
-   ('Elden Ring', 'THE NEW FANTASY ACTION RPG. Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.', 23, 'https://gaming.lenovo.com/emea/attachment.php?attachmentid=5123'),
-   ('God of War', 'His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods and monsters. It is in this harsh, unforgiving world that he must fight to survive… and teach his son to do the same.', 15, 'https://greatgamer.ru/images/games_cover/cover_30768.jpg')
+   insert into products (title, description, price) values  
+   ('Cyberpunk 2077', 'Cyberpunk 2077 is an open-world, action-adventure RPG set in the megalopolis of Night City, where you play as a cyberpunk mercenary wrapped up in a do-or-die fight for survival. Improved and featuring all-new free additional content, customize your character and playstyle as you take on jobs, build a reputation, and unlock upgrades. The relationships you forge and the choices you make will shape the story and the world around you. Legends are made here. What will yours be?', 2.4),
+   ('Assassins creed: Valhalla', 'In Assassins Creed® Valhalla, become Eivor, a legendary Viking warrior on a quest for glory. Explore Englands Dark Ages as you raid your enemies, grow your settlement, and build your political power.', 10),
+   ('The Elder Scrolls V: Skyrim', 'The Elder Scrolls V: Skyrim is an action role-playing video game developed by Bethesda Game Studios and published by Bethesda Softworks. It is the fifth main installment in the Elder Scrolls series, following 2006s', 23),
+   ('Red dead redemption 2', 'Winner of over 175 Game of the Year Awards and recipient of over 250 perfect scores, RDR2 is the epic tale of outlaw Arthur Morgan and the infamous Van der Linde gang, on the run across America at the dawn of the modern age. Also includes access to the shared living world of Red Dead Online.', 15),
+   ('Elden Ring', 'THE NEW FANTASY ACTION RPG. Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.', 23),
+   ('God of War', 'His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods and monsters. It is in this harsh, unforgiving world that he must fight to survive… and teach his son to do the same.', 15)
 4. Fill in table stock
    insert into stock (product_id, count) values
-   ('cd05c40f-a3fc-46d1-afe0-4720c077203e', 4),
-   ('a14b120f-cdb2-465d-a6a6-f2c122a8d617', 6),
-   ('85c58f64-5a9f-4fee-bf03-409e43aa9209', 7),
-   ('adb5fd41-1557-47b9-8d35-e7c0ef02dc96', 12),
-   ('944ce1af-26e6-4759-b1df-8236876f737e', 7),
-   ('4eea6354-ef4b-4d54-a00a-7e3965875c82', 8)
+   ('f59e6652-3df4-4d1f-9d9b-0e1f1553b88f', 4),
+   ('ffad8f20-b213-4cd8-a5f7-0dd5f5634bc2', 6),
+   ('5cdcbdeb-61d7-49bb-94f0-b08bcdb2bd0f', 7),
+   ('cb485545-5874-4b0c-a136-a7708758e978', 12),
+   ('bc545220-2a5d-4482-8817-57c9f7922cee', 7),
+   ('225cc7e5-654d-4ce6-b0b7-ea4c5a3e56d1', 8)
 5. Create extension for uuid creation
    create extension if not exists "uuid-ossp"

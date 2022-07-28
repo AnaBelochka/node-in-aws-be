@@ -28,7 +28,7 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     await client.query("BEGIN");
 
-    const insertIntoProductsTableValues = [body.title, body.description, body.price, body.imageUrl];
+    const insertIntoProductsTableValues = [body.title, body.description, body.price];
     const res = await client.query(createProductQueryTemplate, insertIntoProductsTableValues);
     const insertIntoStockTableValues = [res.rows[0].id, body.count];
 
@@ -37,14 +37,14 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
 
     return formatJSONResponse({
       message: "Product successfully created",
-    },200);
+    }, 200);
   } catch (error) {
     await client.query("ROLLBACK");
 
     return formatJSONResponse({
       message: "Internal server error",
       error,
-    },500);
+    }, 500);
   } finally {
     client.release();
   }
