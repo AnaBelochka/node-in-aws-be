@@ -1,22 +1,41 @@
+import { Client } from "pg";
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 
-import { getProductsByIdMockReturnFromDB } from "../mocks/mocked-functions";
+import { dbOptions } from "../../../pg-client-settings";
 
-const getProductsList: ValidatedEventAPIGatewayProxyEvent<{}> = async (event) => {
+import { getAllProductsQueryTemplate } from "../constants";
+
+const getProductsById: ValidatedEventAPIGatewayProxyEvent<{}> = async (event) => {
+  console.log("Lambda function getProductsById executed with event: ", event);
+
   const productId = event.pathParameters?.productId;
-  const products = await getProductsByIdMockReturnFromDB(productId);
+  const client = new Client(dbOptions);
 
-  if (products && products.length) {
+  await client.connect();
+
+  try {
+    const getProductByIdQuery = `${getAllProductsQueryTemplate} where p.id = '${productId}'`
+    const { rows: products } = await client.query(getProductByIdQuery);
+
+    if (products && products.length) {
+      return formatJSONResponse({
+        products,
+      }, 200);
+    } else {
+      return formatJSONResponse({
+        message: "Products not found",
+      }, 404);
+    }
+  } catch (error) {
     return formatJSONResponse({
-      products,
-    }, 200);
-  } else {
-    return formatJSONResponse({
-      message: "Products not found",
-    }, 404);
+      message: "Internal server error",
+      error,
+    },500);
+  } finally {
+    client.end();
   }
 };
 
-export const main = middyfy(getProductsList);
+export const main = middyfy(getProductsById);
