@@ -3,6 +3,7 @@ import type { AWS } from '@serverless/typescript';
 import getProductsList from '@functions/getProductsList';
 import getProductsById from '@functions/getProductsById';
 import createProduct from '@functions/createProduct';
+import catalogBatchProcess from '@functions/catalogBatchProcess';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -19,10 +20,80 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      TOPIC_ARN: {
+        Ref: 'SNSTopic'
+      },
+      PG_HOST: 'game-shop.csb3e97flgsi.eu-west-1.rds.amazonaws.com',
+      PG_PORT: '5432',
+      PG_DATABASE: 'games',
+      PG_USERNAME: 'superuser',
+      PG_PASSWORD: 'Jsv1xyq50MdwCfP1re9i',
     },
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: ["sqs:*"],
+        Resource: [
+          {
+            "Fn::GetAtt": ["SQSQueue", "Arn"],
+          },
+        ],
+      },
+      {
+        Effect: "Allow",
+        Action: ["sns:*"],
+        Resource: [
+          {
+            Ref: "SNSTopic",
+          },
+        ],
+      }
+    ]
+  },
+  resources: {
+    Resources: {
+      SQSQueue: {
+        Type: "AWS::SQS::Queue",
+        Properties: {
+          QueueName: "catalogItemsQueue",
+        }
+      },
+      SNSTopic: {
+        Type: "AWS::SNS::Topic",
+        Properties: {
+          TopicName: "createProductTopic",
+        },
+      },
+      SNSSubscription: {
+        Type: "AWS::SNS::Subscription",
+        Properties: {
+          Endpoint: "anastasiya_sidorenko@epam.com",
+          Protocol: "email",
+          TopicArn: {
+            Ref: "SNSTopic",
+          },
+          FilterPolicy: {
+            price: [{"numeric": ["<", 100]}],
+          },
+        },
+      },
+      SNSSecondSubscription: {
+        Type: "AWS::SNS::Subscription",
+        Properties: {
+          Endpoint: "tsoi.nastya@gmail.com",
+          Protocol: "email",
+          TopicArn: {
+            Ref: "SNSTopic",
+          },
+          FilterPolicy: {
+            price: [{"numeric": [">=", 100]}],
+          },
+        },
+      },
+    }
   },
   // import the function via paths
-  functions: { getProductsList, getProductsById, createProduct },
+  functions: { getProductsList, getProductsById, createProduct, catalogBatchProcess },
   package: { individually: true },
   custom: {
     esbuild: {

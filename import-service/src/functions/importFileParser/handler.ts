@@ -7,8 +7,14 @@ import { middyfy } from '@libs/lambda';
 import {BUCKET, PREFIXES} from "../consts";
 
 const importProductsFile: Handler<S3Event> = async (event) => {
-  const s3 = new AWS.S3({ region: "eu-west-1" });
   console.log("event.records", event.Records[0]);
+
+  const s3 = new AWS.S3({ region: "eu-west-1" });
+  const sqs = new AWS.SQS({ region: "eu-west-1" });
+  const queueUrl = process.env.SQS_URL;
+
+  console.log("queueUrl", queueUrl)
+
   const key = event.Records[0].s3.object.key;
   const params = {
     Bucket: BUCKET,
@@ -24,7 +30,15 @@ const importProductsFile: Handler<S3Event> = async (event) => {
 
   if (result.length) {
     result.forEach((data) => {
-      console.log("Row from file", data);
+      const message = JSON.stringify(data).replace("\ufeff", "");
+
+      sqs.sendMessage({
+        QueueUrl: queueUrl,
+        MessageBody: message,
+      }, (err) => {
+        console.log("Send message with data: ", message);
+        console.log("Error: ", err);
+      })
     });
 
     await s3.copyObject({
