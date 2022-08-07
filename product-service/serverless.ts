@@ -23,11 +23,6 @@ const serverlessConfiguration: AWS = {
       TOPIC_ARN: {
         Ref: 'SNSTopic'
       },
-      PG_HOST: 'game-shop.csb3e97flgsi.eu-west-1.rds.amazonaws.com',
-      PG_PORT: '5432',
-      PG_DATABASE: 'games',
-      PG_USERNAME: 'superuser',
-      PG_PASSWORD: 'Jsv1xyq50MdwCfP1re9i',
     },
     iamRoleStatements: [
       {
