@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-aws-bff",
+  "version": "1.0.0",
+  "description": "bff service",
+  "main": "index.js",
+  "scripts": {
+    "app-dev": "nodemon index.js",
+    "eb-init": "eb init --platform node.js --region eu-west-1",
+    "eb-create": "eb create development --single --cname anabelochka-bff-api-develop",
+    "eb-deploy": "eb deploy",
+    "eb-terminate": "eb teminate",
+    "start": "node index.js",
+    "set-env": "eb setenv `cat .env.eb | sed '/^#/ d' | sed '/^$/ d'`"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "memory-cache": "^0.2.0",
+    "nodemon": "^2.0.19"
+  }
+}
